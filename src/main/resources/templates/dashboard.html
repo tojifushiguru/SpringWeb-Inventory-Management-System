@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SpringWeb Admin</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/settings.css">
+    <link rel="stylesheet" href="/css/profile.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Asimovian:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@100;300;400;700;900&display=swap"
+        rel="stylesheet">
+    <!-- Google Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Font Awesome for social media icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+
+<body>
+    <!-- Preview Popup Message -->
+    <div id="preview-popup" class="preview-popup">
+        <div class="preview-popup-content">
+            <span class="preview-close">&times;</span>
+            <h1 class="preview-text">Welcome to the SpringWeb Application System!</h1>
+            <p>This system will help you manage your products, orders, suppliers and many more!</p>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>SpringWeb IMS<img src="/image/logo.jfif" alt="Logo" class="sidebar-logo">
+                </h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" data-module="dashboard" class="menu-item active"><span
+                            class="material-icons">dashboard</span>
+                        Dashboard</a></li>
+
+                <li><a href="#" data-module="categories" class="menu-item"><span
+                            class="material-icons">local_offer</span> Categories</a>
+                </li>
+
+                <li><a href="#" data-module="suppliers" class="menu-item"><span
+                            class="material-icons">local_shipping</span> Suppliers</a>
+                </li>
+
+
+                <li><a href="#" data-module="products" class="menu-item"><span class="material-icons">inventory_2</span>
+                        Products</a>
+                </li>
+
+                <li><a href="#" data-module="orders" class="menu-item"><span class="material-icons">shopping_cart</span>
+                        Orders</a>
+                </li>
+
+                <li><a href="#" data-module="transactions" class="menu-item"><span
+                            class="material-icons">credit_card</span>
+                        Transactions</a></li>
+                <li><a href="#" data-module="reports" class="menu-item"><span class="material-icons">bar_chart</span>
+                        Reports</a>
+                </li>
+                <li><a href="#" data-module="settings" class="menu-item"><span class="material-icons">settings</span>
+                        Settings</a></li>
+                <li><a href="#" id="signOut" class="menu-item"><span class="material-icons">logout</span> Sign Out</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1 id="pageTitle">Dashboard</h1>
+            </header>
+
+            <div id="contentArea" class="content-area">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Create/Edit Forms -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">Add Item</h2>
+            <form id="modalForm">
+                <div id="formFields">
+                    <!-- Dynamic form fields will be added here -->
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/settings.js"></script>
+</body>
+
+</html>

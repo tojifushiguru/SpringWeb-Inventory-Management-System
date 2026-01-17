@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operation Spring Web - Login</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Asimovian:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@100;300;400;700;900&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome for social media icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-header">
+            <img src="https://github.com/TBEITBC.png" alt="Emblem" class="emblem">
+            <h1>SpringWeb Inventory Management System</h1>
+            <p class="sub-header">Select your profile to access the system</p>
+        </div>
+
+        <div class="profiles-grid" id="profilesGrid">
+            <!-- Profile cards will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Access Code Modal -->
+    <div id="accessModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Access Verification</h2>
+                <div class="selected-user-info">
+                    <img id="modalProfileImage" src="" alt="Profile">
+                    <div>
+                        <h3 id="modalUserName"></h3>
+                        <p id="modalUserDetails"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Enter your 2-digit access code:</p>
+                <div class="access-code-input">
+                    <input type="text" id="accessCode" maxlength="2" pattern="[0-9]{2}" placeholder="00">
+                </div>
+                <div class="modal-buttons">
+                    <button id="verifyBtn" class="verify-btn">Verify Access</button>
+                    <button id="cancelBtn" class="cancel-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let users = [];
+        let selectedUser = null;
+
+        // Fetch users from server
+        async function fetchUsers() {
+            try {
+                const response = await fetch('/api/public/users');
+                if (response.ok) {
+                    users = await response.json();
+                    createProfileCards();
+                } else {
+                    // If server fails, show empty state
+                    users = [];
+                    createProfileCards();
+                }
+            } catch (error) {
+                // If there's a network error, show empty state
+                users = [];
+                createProfileCards();
+            }
+        }
+
+        // Create simple profile cards for login with specific order
+        function createProfileCards() {
+            const profilesGrid = document.getElementById('profilesGrid');
+            profilesGrid.innerHTML = '';
+
+            // Define the desired order
+            const userOrder = [
+                'PHEAT_PISEY',
+                'ROEURN_MAKARA',
+                'PHAL_KHAMLA',
+                'LONG_SREYNET',
+                'SRIE_VI',
+                'EAM_VIMORL'
+            ];
+
+            // Sort users based on the defined order
+            const sortedUsers = [...users].sort((a, b) => {
+                const indexA = userOrder.indexOf(a.username);
+                const indexB = userOrder.indexOf(b.username);
+                return indexA - indexB;
+            });
+
+            sortedUsers.forEach(user => {
+                const profileCard = document.createElement('div');
+                profileCard.className = 'profile-card';
+                profileCard.onclick = () => selectUser(user);
+
+                profileCard.innerHTML = `
+                    <img src="/image/userP/${user.profileImage.split('/').pop().replace('.png', '.jpg')}" alt="${user.name}" class="profile-image">
+                    <h3 class="profile-name font-khmer">${user.name}</h3>
+                    <p class="profile-username font-numeric">${user.username}</p>
+                `;
+
+                profilesGrid.appendChild(profileCard);
+            });
+        }
+
+        // Select user and show modal
+        function selectUser(user) {
+            selectedUser = user;
+
+            // Update modal content
+            document.getElementById('modalProfileImage').src = `/image/userP/${user.profileImage.split('/').pop().replace('.png', '.jpg')}`;
+            document.getElementById('modalUserName').textContent = user.name;
+            // Remove gender display
+            document.getElementById('modalUserDetails').style.display = 'none';
+
+            // Clear access code input
+            document.getElementById('accessCode').value = '';
+
+            // Show modal
+            document.getElementById('accessModal').style.display = 'block';
+
+            // Focus on access code input
+            setTimeout(() => {
+                document.getElementById('accessCode').focus();
+            }, 100);
+        }
+
+        // Verify access code
+        function verifyAccessCode() {
+            if (!selectedUser) return;
+
+            const accessCode = document.getElementById('accessCode').value;
+
+            if (accessCode.length !== 2) {
+                alert('Please enter a 2-digit access code');
+                return;
+            }
+
+            // Send verification request to server
+            fetch('/api/verify-access', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: selectedUser.username,
+                    accessCode: accessCode
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Set localStorage tokens that dashboard expects
+                        localStorage.setItem('isLoggedIn', 'true');
+                        localStorage.setItem('username', selectedUser.username);
+
+                        // Redirect to dashboard (session-based authentication)
+                        window.location.href = '/dashboard';
+                    } else {
+                        alert('Invalid access code. Please try again.');
+                        document.getElementById('accessCode').value = '';
+                        document.getElementById('accessCode').focus();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Authentication error. Please try again.');
+                });
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('accessModal').style.display = 'none';
+            selectedUser = null;
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchUsers(); // Fetch users from server
+
+            document.getElementById('verifyBtn').onclick = verifyAccessCode;
+            document.getElementById('cancelBtn').onclick = closeModal;
+
+            // Close modal when clicking outside
+            document.getElementById('accessModal').onclick = function (event) {
+                if (event.target === this) {
+                    closeModal();
+                }
+            };
+
+            // Allow Enter key to verify
+            document.getElementById('accessCode').addEventListener('keypress', function (event) {
+                if (event.key === 'Enter') {
+                    verifyAccessCode();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
