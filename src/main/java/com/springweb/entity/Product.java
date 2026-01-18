@@ -157,7 +157,6 @@ public class Product {
         this.reorderLevel = reorderLevel != null ? reorderLevel : 0;
     }
 
-    // toString() method without relationships to avoid circular reference
     @Override
     public String toString() {
         return "Product{" +

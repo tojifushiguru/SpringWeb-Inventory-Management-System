@@ -41,7 +41,6 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     @Query("SELECT s FROM Supplier s WHERE s.contactEmail IS NOT NULL AND s.contactEmail != ''")
     List<Supplier> findAllWithContactEmail();
 
-    // Method to find suppliers with product count (if needed later)
     @Query("SELECT s, COUNT(p) FROM Supplier s LEFT JOIN Product p ON p.supplier = s GROUP BY s")
     List<Object[]> findAllWithProductCount();
 }

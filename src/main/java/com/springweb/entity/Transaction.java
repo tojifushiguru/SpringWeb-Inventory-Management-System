@@ -196,7 +196,6 @@ public class Transaction {
         this.updatedAt = updatedAt;
     }
 
-    // toString() method without order reference to avoid circular reference
     @Override
     public String toString() {
         return "Transaction{" +

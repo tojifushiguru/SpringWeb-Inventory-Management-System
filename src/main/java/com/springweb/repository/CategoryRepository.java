@@ -29,7 +29,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT c FROM Category c ORDER BY c.name ASC")
     List<Category> findAllOrderByName();
 
-    // Method to find categories with product count (if needed later)
     @Query("SELECT c, COUNT(p) FROM Category c LEFT JOIN Product p ON p.category = c GROUP BY c")
     List<Object[]> findAllWithProductCount();
 }

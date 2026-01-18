@@ -119,7 +119,6 @@ public class Supplier {
         this.createdAt = createdAt;
     }
 
-    // toString() method without products to avoid circular reference
     @Override
     public String toString() {
         return "Supplier{" +

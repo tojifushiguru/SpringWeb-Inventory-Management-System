@@ -101,7 +101,6 @@ public class OrderItem {
         this.totalPrice = totalPrice;
     }
 
-    // toString() method without relationships to avoid circular reference
     @Override
     public String toString() {
         return "OrderItem{" +

@@ -106,7 +106,7 @@ public class SimpleOrderController {
 
                      order.setOrderItems(orderItems);
                      order.setTotalAmount(totalAmount);
-                     order.setStatus(Order.OrderStatus.PENDING); // Use enum instead of string
+                     order.setStatus(Order.OrderStatus.PENDING);
                      order.setPlacedAt(LocalDateTime.now());
 
                      Order savedOrder = orderRepository.save(order);

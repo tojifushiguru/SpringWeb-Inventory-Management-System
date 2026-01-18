@@ -260,8 +260,6 @@ public class WebController {
 
             User user = userOptional.get();
 
-            // Note: Since we don't have an 'active' field in the User entity,
-            // this is a placeholder. In a real application, you would add this field.
             response.put("success", true);
             response.put("message", "User status toggled successfully");
             response.put("user", user);

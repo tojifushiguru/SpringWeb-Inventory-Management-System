@@ -223,7 +223,6 @@ public class Order {
         this.updatedAt = updatedAt;
     }
 
-    // toString() method without orderItems to avoid circular reference
     @Override
     public String toString() {
         return "Order{" +
